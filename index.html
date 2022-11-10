@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Korean Vocab</title>
+</head>
+<body>
+    <div class="card">
+        <div class="answercontents">
+            <div class="word">
+                <h1 class="vocabword" placeholder="">안녕하세요</h1>
+            </div>
+            <!-- text input -->
+            <div class="input">
+                <input type="text" id="input" placeholder="뭐예요?">
+            </div>
+            </div class="answerbutton">
+            <button class="answerbutton" onclick="checkAnswer()">Check Answer</button>
+            </div>
+            <div class="nextbutton">
+                <button class="nextbutton" onclick="newWord()">Next</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<!-- center card class -->
+<style>
+.card {
+    width: 500px;
+    height: 500px;
+    background-color: #f1f1f1;
+    border-radius: 25px;
+    margin: auto;
+    margin-top: 100px;
+    padding: 10px;
+    text-align: center;
+}
+/* center in card answercontents class horizontally and vertically */
+.answercontents {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    margin-top: 140px;
+}
+/* make next button match css on answer button */
+.nextbutton {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 30%;
+    margin-top: -120px;
+    /* make hidden */
+}
+/* make all buttons rounded */
+button {
+    border-radius: 5px;
+    /* make border thinner */
+    border: 1px solid black;
+    /* when hovering over button, remove border */
+    transition: 0.3s;
+
+}
+
+button:hover {
+    border: none;
+    transition: 0.3;
+}
+
+</style>
+<script>
+    var words = {
+        yes: "네",
+        no: "아니요",
+        hello: "안녕하세요",
+        goodbye: "안녕히가세요",
+        thank: "고맙습니다",
+        sorry: "미안합니다",
+        please: "주세요",
+        you: "당신",
+        me: "나",
+    };
+    // on page load, get a random word from the words object
+    window.onload = function() {
+        var randomWord = Object.keys(words)[Math.floor(Math.random() * Object.keys(words).length)];
+        document.getElementsByClassName("vocabword")[0].innerHTML = randomWord;
+        // make next button hidden
+        document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
+    }
+    // function that creates new vocab word
+    function newWord() {
+        var randomWord = Object.keys(words)[Math.floor(Math.random() * Object.keys(words).length)];
+        document.getElementsByClassName("vocabword")[0].innerHTML = randomWord;
+        // make the next button hidden
+        document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
+        // change the color of the button back to white
+        document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "white";
+    }
+    // when button is clicked check if the answer is correct
+    function checkAnswer() {
+        var answer = document.getElementById("input").value;
+        var correctAnswer = words[document.getElementsByClassName("vocabword")[0].innerHTML];
+        if (answer == correctAnswer) {
+            // change the color of the button to green
+            document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "green";
+            // make the next button visible
+            document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
+        } else {
+            //change the color of the button to red
+            document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "red";
+            // make the next button visible
+            document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
+        }
+    }
+</script>
