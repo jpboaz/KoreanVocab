@@ -14,10 +14,10 @@
                 <input type="text" id="input" placeholder="뭐예요?">
             </div>
             </div class="answerbutton">
-            <button class="answerbutton" onclick="checkAnswer()">Check Answer</button>
+            <button class="answerbutton first" onclick="checkAnswer()">Check Answer</button>
             </div>
             <div class="nextbutton">
-                <button class="nextbutton" onclick="newWord()">Next</button>
+                <button class="nextbutton first" onclick="newWord()">Next</button>
             </div>
         </div>
     </div>
@@ -27,6 +27,10 @@
 
 <!-- center card class -->
 <style>
+/* make vocab word text white */
+.vocabword {
+    color: white;
+}
 .card {
     width: 500px;
     height: 500px;
@@ -58,17 +62,49 @@
 }
 /* make all buttons rounded */
 button {
-    border-radius: 5px;
-    /* make border thinner */
-    border: 1px solid black;
-    /* when hovering over button, remove border */
-    transition: 0.3s;
-
+  box-sizing: border-box;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 2px solid #16A085;
+  border-radius: 0.6em;
+  color: #16A085;
+  cursor: pointer;
+  /* display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-self: center;
+      -ms-flex-item-align: center;
+          align-self: center; */
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: 20px;
+  padding: 1.2em 2.8em;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  /* align vertically and horizontally */
+}
+button:hover, .btn:focus {
+  color: #fff;
+  outline: 0;
+}
+.first {
+  -webkit-transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+}
+.first:hover {
+  box-shadow: 0 0 40px 40px #16A085 inset;
 }
 
-button:hover {
-    border: none;
-    transition: 0.3;
+/* make nextbutton further down */
+.nextbutton {
+    margin-top: -60px;
 }
 
 </style>
@@ -90,6 +126,10 @@ button:hover {
         document.getElementsByClassName("vocabword")[0].innerHTML = randomWord;
         // make next button hidden
         document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
+        // make card soft green
+        document.getElementsByClassName("card")[0].style.backgroundColor = "#b0b0b0";  //soft green #e6ffe6
+        // make background dark gray
+        document.body.style.backgroundColor = "#3d3d3d";
     }
     // function that creates new vocab word
     function newWord() {
@@ -99,6 +139,10 @@ button:hover {
         document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
         // change the color of the button back to white
         document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "white";
+        // change card back to #b0b0b0
+        document.getElementsByClassName("card")[0].style.backgroundColor = "#b0b0b0";
+        // remove user input from text box
+        document.getElementById("input").value = "";
     }
     // when button is clicked check if the answer is correct
     function checkAnswer() {
@@ -106,14 +150,18 @@ button:hover {
         var correctAnswer = words[document.getElementsByClassName("vocabword")[0].innerHTML];
         if (answer == correctAnswer) {
             // change the color of the button to green
-            document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "green";
             // make the next button visible
             document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
+            // make card fade to #e6ffe6
+            document.getElementsByClassName("card")[0].style.backgroundColor = "#e6ffe6";
+            // change vocab word color text to black
+            document.getElementsByClassName("vocabword")[0].style.color = "black";
         } else {
             //change the color of the button to red
-            document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "red";
             // make the next button visible
             document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
+            // make card fade to ff6347
+            document.getElementsByClassName("card")[0].style.backgroundColor = "#ff6347";
         }
     }
 </script>
