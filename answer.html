@@ -1,0 +1,93 @@
+<!--html template-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Korean Vocab</title>
+</head>
+<body>
+    <h1>Vocabulary</h1>
+    <!-- horizontal line -->
+    <hr>
+    <div class="maincontent">
+        <table class="answers">
+
+        </table>
+    </div>
+</body>
+</html>
+
+<style>
+    /* make table with thin edges */
+    .answers {
+        border-collapse: separate;
+        width: 100%;
+        /* make the table cells have borders */
+        border: 2px solid black;
+        /* round corners of table */
+        border-radius: 10px;
+        padding: 10px;
+
+    }
+    /* center maincontent */
+    .maincontent {
+        margin: auto;
+        width: 50%;
+        padding: 10px;
+    }
+
+    /* make horizontal line thinner */
+    hr {
+        height: 1px;
+        border: 0;
+        background-color: black;
+    }
+</style>
+
+<script>
+    //import words var from index.html and display it in the answers table
+    var words = {
+        yes: "네",
+        no: "아니요",
+        hello: "안녕하세요",
+        man: "사람",
+        teacher: "선생님",
+        doctor: "의사",
+        nurse: "간호사",
+        secretary: "비서",
+        athlete: "운동선수",
+        student: "학생",
+        lawyer: "변호사",
+        officeworker: "회사원",
+        driver: "운전사",
+        housewife: "주부",
+        singer: "가수",
+        chef: "요리사",
+        pharmacist: "약사",
+        police: "경찰관",
+        firefighter: "소방관",
+        clerk: "점원",
+        bankteller: "은행원",
+        translator: "통역사",
+        hairdresser: "미용사",
+        mechanic: "기술자",
+    };
+    // function for when window loads
+    window.onload = function() {
+        document.body.style.backgroundColor = "#3d3d3d";
+        // get the table element
+        var table = document.getElementsByClassName("answers")[0];
+        // for each word in the words object
+        for (var word in words) {
+            // create a new row
+            var row = table.insertRow();
+            // create a new cell for the word
+            var cell1 = row.insertCell();
+            // create a new cell for the translation
+            var cell2 = row.insertCell();
+            // set the text of the word cell to the word
+            cell1.innerHTML = word;
+            // set the text of the translation cell to the translation
+            cell2.innerHTML = words[word];
+        }
+    }
+</script>

@@ -4,6 +4,9 @@
     <title>Korean Vocab</title>
 </head>
 <body>
+    <!-- checkmark button  -->
+    <button class="answers first" onclick="openAnswerPage()">Answers</button>
+
     
     <div class="maincard">
         <div class="answercontents">
@@ -111,6 +114,20 @@ button:hover, .btn:focus {
     margin-top: -60px;
 }
 
+/* put the answers button in the top right */
+.answers {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 30px;
+    /* make it thinner */
+    width: 120px;
+    /* center text in button */
+    text-align: center;
+    /* bring text further to the left */
+    padding-left: 20px;
+}
+
 </style>
 <script>
     var words = {
@@ -188,5 +205,11 @@ button:hover, .btn:focus {
             // change the text of the check answer button to the correct answer
             document.getElementsByClassName("answerbutton")[0].innerHTML = correctAnswer;
         }
+    }
+
+    // when the answers button is clicked, show the answers
+    function openAnswerPage() {
+        // open answers.html in a new tab
+        window.open("answer.html", "_blank");
     }
 </script>
