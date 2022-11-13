@@ -4,7 +4,8 @@
     <title>Korean Vocab</title>
 </head>
 <body>
-    <div class="card">
+    
+    <div class="maincard">
         <div class="answercontents">
             <div class="word">
                 <h1 class="vocabword" placeholder="">안녕하세요</h1>
@@ -21,26 +22,29 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
 
 <!-- center card class -->
 <style>
+
 /* make vocab word text white */
 .vocabword {
     color: white;
 }
-.card {
+
+.maincard {
     width: 500px;
     height: 500px;
-    background-color: #f1f1f1;
     border-radius: 25px;
     margin: auto;
     margin-top: 100px;
     padding: 10px;
     text-align: center;
 }
+
 /* center in card answercontents class horizontally and vertically */
 .answercontents {
     display: flex;
@@ -127,7 +131,7 @@ button:hover, .btn:focus {
         // make next button hidden
         document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
         // make card soft green
-        document.getElementsByClassName("card")[0].style.backgroundColor = "#b0b0b0";  //soft green #e6ffe6
+        document.getElementsByClassName("maincard")[0].style.backgroundColor = "#b0b0b0";  //soft green #e6ffe6
         // make background dark gray
         document.body.style.backgroundColor = "#3d3d3d";
     }
@@ -138,12 +142,16 @@ button:hover, .btn:focus {
         // make the next button hidden
         document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
         // change the color of the button back to white
-        document.getElementsByClassName("answerbutton")[0].style.backgroundColor = "white";
         // change card back to #b0b0b0
-        document.getElementsByClassName("card")[0].style.backgroundColor = "#b0b0b0";
+        document.getElementsByClassName("maincard")[0].style.backgroundColor = "#b0b0b0";
         // remove user input from text box
         document.getElementById("input").value = "";
+        // change text in check answer button back to check answer
+        document.getElementsByClassName("answerbutton")[0].innerHTML = "Check Answer";
     }
+
+    // 
+
     // when button is clicked check if the answer is correct
     function checkAnswer() {
         var answer = document.getElementById("input").value;
@@ -153,7 +161,7 @@ button:hover, .btn:focus {
             // make the next button visible
             document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
             // make card fade to #e6ffe6
-            document.getElementsByClassName("card")[0].style.backgroundColor = "#e6ffe6";
+            document.getElementsByClassName("maincard")[0].style.backgroundColor = "#e6ffe6";
             // change vocab word color text to black
             document.getElementsByClassName("vocabword")[0].style.color = "black";
         } else {
@@ -161,7 +169,9 @@ button:hover, .btn:focus {
             // make the next button visible
             document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
             // make card fade to ff6347
-            document.getElementsByClassName("card")[0].style.backgroundColor = "#ff6347";
+            document.getElementsByClassName("maincard")[0].style.backgroundColor = "#ff6347";
+            // change the text of the check answer button to the correct answer
+            document.getElementsByClassName("answerbutton")[0].innerHTML = correctAnswer;
         }
     }
 </script>
