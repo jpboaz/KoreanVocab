@@ -1,192 +1,349 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Korean Vocab</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study your vocab!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.2em;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: #f8fafc;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .study-section {
+            display: none;
+        }
+
+        .word-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .word-display {
+            font-size: 2em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            font-size: 0.9em;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .json-hint {
+            font-size: 0.9em;
+            color: #718096;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .completion {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .completion h2 {
+            color: #38a169;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .completion p {
+            color: #4a5568;
+            font-size: 1.1em;
+        }
+
+        .restart-btn {
+            margin-top: 20px;
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideIn 0.5s ease-out;
+        }
+    </style>
 </head>
 <body>
-    
-    <div class="maincard">
-        <div class="answercontents">
-            <div class="word">
-                <h1 class="vocabword" placeholder="">안녕하세요</h1>
+    <div class="container">
+        <h1>📚 Vocab</h1>
+
+        <div id="inputSection" class="input-section">
+            <textarea id="jsonInput" placeholder='Enter your vocabulary JSON here...
+
+Example:
+{
+  "hello": "hola",
+  "goodbye": "adiós",
+  "thank you": "gracias"
+}'></textarea>
+            <div class="json-hint">Enter JSON with word pairs: {"english": "translation"}</div>
+            <br>
+            <button onclick="startStudy()">Start Studying</button>
+        </div>
+
+        <div id="studySection" class="study-section">
+            <div class="word-card animate-in">
+                <div class="progress" id="progress"></div>
+                <div class="word-display" id="currentWord"></div>
+                <input type="text" id="answerInput" placeholder="Type the translation..." onkeydown="handleKeyPress(event)">
+                <div class="feedback" id="feedback"></div>
             </div>
-            <!-- text input -->
-            <div class="input">
-                <input type="text" id="input" placeholder="뭐예요?">
-            </div>
-            </div class="answerbutton">
-            <button class="answerbutton first" onclick="checkAnswer()">Check Answer</button>
-            </div>
-            <div class="nextbutton">
-                <button class="nextbutton first" onclick="newWord()">Next</button>
-            </div>
+            <button id="nextBtn" onclick="nextWord()" disabled>Next Word</button>
+        </div>
+
+        <div id="completionSection" class="completion" style="display: none;">
+            <h2>🎉 Congratulations!</h2>
+            <p>You've completed all the vocabulary words!</p>
+            <button class="restart-btn" onclick="restart()">Study Again</button>
         </div>
     </div>
 
-</body>
+    <script>
+        let vocabData = {};
+        let vocabArray = [];
+        let currentIndex = 0;
+        let isAnswered = false;
 
-</html>
+        function startStudy() {
+            const jsonInput = document.getElementById('jsonInput').value.trim();
 
-<!-- center card class -->
-<style>
+            if (!jsonInput) {
+                alert('Please enter some vocabulary JSON first!');
+                return;
+            }
 
-/* make vocab word text white */
-.vocabword {
-    color: white;
-}
+            try {
+                vocabData = JSON.parse(jsonInput);
+                vocabArray = Object.entries(vocabData);
 
-.maincard {
-    width: 500px;
-    height: 500px;
-    border-radius: 25px;
-    margin: auto;
-    margin-top: 100px;
-    padding: 10px;
-    text-align: center;
-}
+                if (vocabArray.length === 0) {
+                    alert('Please enter valid vocabulary data!');
+                    return;
+                }
 
-/* center in card answercontents class horizontally and vertically */
-.answercontents {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 30%;
-    margin-top: 140px;
-}
-/* make next button match css on answer button */
-.nextbutton {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 30%;
-    margin-top: -120px;
-    /* make hidden */
-}
-/* make all buttons rounded */
-button {
-  box-sizing: border-box;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 2px solid #16A085;
-  border-radius: 0.6em;
-  color: #16A085;
-  cursor: pointer;
-  /* display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-align-self: center;
-      -ms-flex-item-align: center;
-          align-self: center; */
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1;
-  margin: 20px;
-  padding: 1.2em 2.8em;
-  text-decoration: none;
-  text-align: center;
-  text-transform: uppercase;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  /* align vertically and horizontally */
-}
-button:hover, .btn:focus {
-  color: #fff;
-  outline: 0;
-}
-.first {
-  -webkit-transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
-  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
-}
-.first:hover {
-  box-shadow: 0 0 40px 40px #16A085 inset;
-}
+                currentIndex = 0;
+                isAnswered = false;
 
-/* make nextbutton further down */
-.nextbutton {
-    margin-top: -60px;
-}
+                document.getElementById('inputSection').style.display = 'none';
+                document.getElementById('studySection').style.display = 'block';
 
-</style>
-<script>
-    var words = {
-        yes: "네",
-        no: "아니요",
-        hello: "안녕하세요",
-        man: "사람",
-        teacher: "선생님",
-        doctor: "의사",
-        nurse: "간호사",
-        secretary: "비서",
-        athlete: "운동선수",
-        student: "학생",
-        lawyer: "변호사",
-        officeworker: "회사원",
-        driver: "운전사",
-        housewife: "주부",
-        singer: "가수",
-        chef: "요리사",
-        pharmacist: "약사",
-        police: "경찰관",
-        firefighter: "소방관",
-        clerk: "점원",
-        bankteller: "은행원",
-        translator: "통역사",
-        hairdresser: "미용사",
-        mechanic: "기술자",
-    };
-    // on page load, get a random word from the words object
-    window.onload = function() {
-        var randomWord = Object.keys(words)[Math.floor(Math.random() * Object.keys(words).length)];
-        document.getElementsByClassName("vocabword")[0].innerHTML = randomWord;
-        // make next button hidden
-        document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
-        // make card soft green
-        document.getElementsByClassName("maincard")[0].style.backgroundColor = "#b0b0b0";  //soft green #e6ffe6
-        // make background dark gray
-        document.body.style.backgroundColor = "#3d3d3d";
-    }
-    // function that creates new vocab word
-    function newWord() {
-        var randomWord = Object.keys(words)[Math.floor(Math.random() * Object.keys(words).length)];
-        document.getElementsByClassName("vocabword")[0].innerHTML = randomWord;
-        // make the next button hidden
-        document.getElementsByClassName("nextbutton")[0].style.visibility = "hidden";
-        // change the color of the button back to white
-        // change card back to #b0b0b0
-        document.getElementsByClassName("maincard")[0].style.backgroundColor = "#b0b0b0";
-        // remove user input from text box
-        document.getElementById("input").value = "";
-        // change text in check answer button back to check answer
-        document.getElementsByClassName("answerbutton")[0].innerHTML = "Check Answer";
-    }
+                showCurrentWord();
+                document.getElementById('answerInput').focus();
 
-    // 
-
-    // when button is clicked check if the answer is correct
-    function checkAnswer() {
-        var answer = document.getElementById("input").value;
-        var correctAnswer = words[document.getElementsByClassName("vocabword")[0].innerHTML];
-        if (answer == correctAnswer) {
-            // change the color of the button to green
-            // make the next button visible
-            document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
-            // make card fade to #e6ffe6
-            document.getElementsByClassName("maincard")[0].style.backgroundColor = "#e6ffe6";
-            // change vocab word color text to black
-            document.getElementsByClassName("vocabword")[0].style.color = "black";
-        } else {
-            //change the color of the button to red
-            // make the next button visible
-            document.getElementsByClassName("nextbutton")[0].style.visibility = "visible";
-            // make card fade to ff6347
-            document.getElementsByClassName("maincard")[0].style.backgroundColor = "#ff6347";
-            // change the text of the check answer button to the correct answer
-            document.getElementsByClassName("answerbutton")[0].innerHTML = correctAnswer;
+            } catch (error) {
+                alert('Invalid JSON format. Please check your input and try again.');
+            }
         }
-    }
-</script>
+
+        function showCurrentWord() {
+            const [word, translation] = vocabArray[currentIndex];
+            document.getElementById('currentWord').textContent = word;
+            document.getElementById('progress').textContent = `${currentIndex + 1} of ${vocabArray.length}`;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('nextBtn').disabled = true;
+            isAnswered = false;
+        }
+
+        function checkAnswer() {
+            if (isAnswered) return;
+
+            const userAnswer = document.getElementById('answerInput').value.trim().toLowerCase();
+            const correctAnswer = vocabArray[currentIndex][1].toLowerCase();
+            const feedback = document.getElementById('feedback');
+
+            if (userAnswer === correctAnswer) {
+                feedback.textContent = '✓ Correct!';
+                feedback.className = 'feedback correct';
+                isAnswered = true;
+            } else {
+                //feedback.textContent = `✗ Incorrect. The answer is: ${vocabArray[currentIndex][1]}`;
+                feedback.textContent = `✗ Incorrect.`;
+                feedback.className = 'feedback incorrect';
+            }
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextWord() {
+            currentIndex++;
+
+            if (currentIndex >= vocabArray.length) {
+                document.getElementById('studySection').style.display = 'none';
+                document.getElementById('completionSection').style.display = 'block';
+                return;
+            }
+
+            showCurrentWord();
+            document.getElementById('answerInput').focus();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                if (!isAnswered) {
+                    checkAnswer();
+                } else {
+                    nextWord();
+                }
+            }
+        }
+
+        function restart() {
+            document.getElementById('completionSection').style.display = 'none';
+            document.getElementById('inputSection').style.display = 'block';
+            document.getElementById('jsonInput').value = '';
+            currentIndex = 0;
+            isAnswered = false;
+        }
+
+        // Auto-check answer as user types
+        document.getElementById('answerInput').addEventListener('input', function() {
+            if (!isAnswered) {
+                checkAnswer();
+            }
+        });
+    </script>
+</body>
+</html>
