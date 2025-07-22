@@ -217,9 +217,13 @@ Example:
   "goodbye": "adiós",
   "thank you": "gracias"
 }'></textarea>
-            <div class="json-hint">Enter JSON with word pairs: {"english": "translation"}</div>
+           <!-- -- <div class="json-hint">Enter JSON with word pairs: {"english": "translation"}</div> -->
+            <br>
             <br>
             <button onclick="startStudy()">Start Studying</button>
+        </div>
+        <div id="checkboxdiv">
+            <input type="checkbox" id="randomBox"><p>Randomize</p>
         </div>
 
         <div id="studySection" class="study-section">
@@ -257,6 +261,12 @@ Example:
                 vocabData = JSON.parse(jsonInput);
                 vocabArray = Object.entries(vocabData);
 
+                myBox = document.getElementById("randomBox");
+                if (myBox.checked) {
+                  vocabArray = shuffleArray(vocabArray);
+                }
+                document.getElementById("checkboxdiv").hidden = true;
+
                 if (vocabArray.length === 0) {
                     alert('Please enter valid vocabulary data!');
                     return;
@@ -274,6 +284,14 @@ Example:
             } catch (error) {
                 alert('Invalid JSON format. Please check your input and try again.');
             }
+        }
+
+        function shuffleArray(array) {
+          for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+          }
+          return array;
         }
 
         function showCurrentWord() {
@@ -336,6 +354,7 @@ Example:
             document.getElementById('jsonInput').value = '';
             currentIndex = 0;
             isAnswered = false;
+            document.getElementById("checkboxdiv").hidden = false;
         }
 
         // Auto-check answer as user types
