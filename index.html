@@ -31,6 +31,18 @@
             width: 100%;
             text-align: center;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .drawer-container {
+            width: 300px;
+            height: 300px;
+            margin: 50px auto;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #fff;
         }
 
         .container:hover {
@@ -202,11 +214,71 @@
         .animate-in {
             animation: slideIn 0.5s ease-out;
         }
+
+        #extra-vocab {
+            display: none;
+        }
+
+
+        .drawer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer h2 {
+            margin-bottom: 20px;
+        }
+
+        .drawer ul {
+            list-style: none;
+        }
+
+        .drawer ul li {
+            margin: 10px 0;
+            font-fize: 18px;
+        }
+
+        .drawer ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .drawer ul li a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+
+        <div class="drawer" id="drawer">
+            <h2>Menu</h2>
+            <ul>
+                <li><a onclick="startStudy('./unit1lesson1.json')">Unit 1 Lesson 1</a></li>
+                <li><a href="#">about</a></li>
+                <li><a href="#">next</a></li>
+                <li><a href="#">info</a></li>
+            </ul>
+        </div>
         <h1>📚 Vocab</h1>
+
+        <label id="extra-vocab">Hello world</label>
 
         <div id="inputSection" class="input-section">
             <textarea id="jsonInput" placeholder='Enter your vocabulary JSON here...
@@ -243,14 +315,43 @@ Example:
         </div>
     </div>
 
+    <!-- --
+    <div class="drawer-container">
+       <div class="drawer" id="drawer">
+           <h2>Menu</h2>
+           <ul>
+               <li><a href="#">home</a></li>
+               <li><a href="#">about</a></li>
+               <li><a href="#">next</a></li>
+               <li><a href="#">info</a></li>
+           </ul>
+       </div>
+    </div>
+    -->
+
     <script>
         let vocabData = {};
         let vocabArray = [];
         let currentIndex = 0;
         let isAnswered = false;
 
-        function startStudy() {
-            const jsonInput = document.getElementById('jsonInput').value.trim();
+        async function jsonData(file) {
+          //console.log(text);
+          const raw = await fetch(file);
+          const data = await raw.json();
+          return data;
+        }
+
+        async function startStudy(file) {
+            var jsonInput;
+
+            if (file == undefined) {
+                jsonInput = document.getElementById('jsonInput').value.trim();
+            } else {
+                console.log(file);
+                jsonInput = await jsonData(file);
+                jsonInput = JSON.stringify(jsonInput);
+            }
 
             if (!jsonInput) {
                 alert('Please enter some vocabulary JSON first!');
@@ -362,6 +463,24 @@ Example:
             if (!isAnswered) {
                 checkAnswer();
             }
+        });
+
+        const drawer = document.getElementById('drawer');
+
+
+        //maybe show custom list of stuff?
+        document.addEventListener('keydown', function(event) {
+          if ((event.ctrlKey || event.metaKey) && event.key === '/') {
+            event.preventDefault();
+            const label = document.getElementById('extra-vocab');
+            if (label.style.display == 'none') {
+              label.style.display = 'block';
+              drawer.classList.toggle('open');
+            } else {
+              label.style.display = 'none';
+              drawer.classList.toggle('open');
+            }
+          }
         });
     </script>
 </body>
