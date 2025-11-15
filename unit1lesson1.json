@@ -1,7 +1,6 @@
 {
   "도시": "city",
   "이름": "name",
-  "저": "i",
   "나": "i",
   "남자": "man",
   "여자": "woman",
@@ -10,7 +9,6 @@
   "것": "thing",
   "이것": "this thing",
   "그것": "that thing",
-  "저것": "that thing",
   "의자": "chair",
   "탁자": "table",
   "선생님": "teacher",
