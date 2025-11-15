@@ -251,7 +251,7 @@
 
         .drawer ul li {
             margin: 10px 0;
-            font-fize: 18px;
+            font-size: 18px;
         }
 
         .drawer ul li a {
@@ -262,9 +262,31 @@
         .drawer ul li a:hover {
             text-decoration: underline;
         }
+
+        .mobileButton {
+            display: none;
+            padding: 12px 30px;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .mobileButton {
+                display: inline-block;
+            }
+            
+        }
     </style>
 </head>
 <body>
+    <span class="mobileButton" onclick="open_drawer()">☰</span>
     <div class="container">
 
         <div class="drawer" id="drawer">
@@ -277,8 +299,6 @@
             </ul>
         </div>
         <h1>📚 Vocab</h1>
-
-        <label id="extra-vocab">Hello world</label>
 
         <div id="inputSection" class="input-section">
             <textarea id="jsonInput" placeholder='Enter your vocabulary JSON here...
@@ -296,6 +316,7 @@ Example:
         </div>
         <div id="checkboxdiv">
             <input type="checkbox" id="randomBox"><p>Randomize</p>
+            <input type="checkbox" id="reverseBox"><p>Reverse</p>
         </div>
 
         <div id="studySection" class="study-section">
@@ -335,6 +356,14 @@ Example:
         let currentIndex = 0;
         let isAnswered = false;
 
+        function reverse_json(data) {
+            const reversed = {};
+            for (const [key, value] of Object.entries(data)) {
+                reversed[value] = key;
+            }
+            return reversed;
+        }
+
         async function jsonData(file) {
           //console.log(text);
           const raw = await fetch(file);
@@ -343,6 +372,7 @@ Example:
         }
 
         async function startStudy(file) {
+            open_drawer();
             var jsonInput;
 
             if (file == undefined) {
@@ -360,10 +390,15 @@ Example:
 
             try {
                 vocabData = JSON.parse(jsonInput);
+                reverseBox = document.getElementById("reverseBox");
+                if (reverseBox.checked){
+                    vocabData = reverse_json(vocabData);
+                    console.log(vocabData);
+                }
                 vocabArray = Object.entries(vocabData);
 
-                myBox = document.getElementById("randomBox");
-                if (myBox.checked) {
+                randomBox = document.getElementById("randomBox");
+                if (randomBox.checked) {
                   vocabArray = shuffleArray(vocabArray);
                 }
                 document.getElementById("checkboxdiv").hidden = true;
@@ -383,7 +418,7 @@ Example:
                 document.getElementById('answerInput').focus();
 
             } catch (error) {
-                alert('Invalid JSON format. Please check your input and try again.');
+                alert('Invalid JSON format. Please check your input and try again.' + error);
             }
         }
 
@@ -465,21 +500,17 @@ Example:
             }
         });
 
-        const drawer = document.getElementById('drawer');
-
+        function open_drawer() {
+            console.log("opening drawer");
+            const drawer = document.getElementById('drawer');
+            drawer.classList.toggle('open');
+        }
 
         //maybe show custom list of stuff?
         document.addEventListener('keydown', function(event) {
           if ((event.ctrlKey || event.metaKey) && event.key === '/') {
             event.preventDefault();
-            const label = document.getElementById('extra-vocab');
-            if (label.style.display == 'none') {
-              label.style.display = 'block';
-              drawer.classList.toggle('open');
-            } else {
-              label.style.display = 'none';
-              drawer.classList.toggle('open');
-            }
+            open_drawer();
           }
         });
     </script>
