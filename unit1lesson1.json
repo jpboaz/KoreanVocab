@@ -27,5 +27,17 @@
   "학생": "student",
   "이다": "to be",
   "네": "yes",
-  "아니": "no"
+  "아니": "no",
+  "안녕하세요": "hello",
+  "감사합니다": "thank you",
+  "잘 지내세요?": "how are you?",
+  "제발": "please",
+  "나는 남자이다": "i am a man",
+  "나는 선생님이다": "i am a teacher",
+  "이 사람": "this person",
+  "그 사람은 의사이다": "that person is a doctor",
+  "그 사람은 선생님이다": "that person is a teacher",
+  "저것은 침대이다": "that thing is a bed",
+  "그 사람은 여자이다": "that person is a woman",
+  "이것은 나무이다": "this thing is a tree"
 }
